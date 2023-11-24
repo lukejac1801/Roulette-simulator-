@@ -1,4 +1,5 @@
 import random
+import matplotlib
 
 class RouletteWheel:
     def __init__(self, zeroes=2):
@@ -128,7 +129,7 @@ class Table:
         
         self.limit = 10000
         if bet_limit == 'stagger':
-            self.limit = (2500, 5000, 7500, 10000, 12500, 15000, 50000, 50000)
+            self.limit = (2500, 5000, 7500, 10000, 12500, 15000, 25000, 50000)
         else:
             self.limit = (bet_limit, bet_limit, bet_limit, bet_limit, bet_limit, bet_limit, bet_limit, bet_limit)
         self.rounds = round_limit
@@ -258,6 +259,42 @@ class Table:
         
 #MAIN
 
+
+#Roulette table test
+
+bots = []
+bets = [[], [], [], [], [], [], [], []]
+for i in range(10000):
+    bots.append(Bettor())
+
+for bot in bots:
+    bets[0].append(bot.single_bet(1))
+    bets[1].append(bot.two_bet(1))
+    bets[2].append(bot.three_bet(1))
+    bets[3].append(bot.four_bet(1))
+    bets[4].append(bot.five_bet(1))
+    bets[5].append(bot.six_bet(1))
+    bets[6].append(bot.twelve_bet(1))
+    bets[7].append(bot.half_bet(1))
+
+wins = [0, 0, 0, 0, 0, 0, 0, 0]
+for i in range(8):
+    for bet in bets[i]:
+        if(bet[0]):
+            wins[i] = wins[i] + 1
+        
+print("single: " + str(1/38) + " | " + str(wins[0]/10000))
+print("two: " + str(2/38) + " | " + str(wins[1]/10000))
+print("three: " + str(3/38) + " | " + str(wins[2]/10000))
+print("four: " + str(4/38) + " | " + str(wins[3]/10000))
+print("five: " + str(5/38) + " | " + str(wins[4]/10000))
+print("six: " + str(6/38) + " | " + str(wins[5]/10000))
+print("twelve: " + str(12/38) + " | " + str(wins[6]/10000))
+print("half: " + str(18/38) + " | " + str(wins[7]/10000))
+
+
+
+
 # test1 = Table(10, 55000, 10000, 30, RouletteWheel())
 # results1 = test1.run_martingale()
 
@@ -274,45 +311,53 @@ class Table:
 #             robot.append(roun[j])
 #         fp.write("Bettor " + str(j) + ": " + str(robot) + "\n")
 
-test2 = Table(100, 10000, 1000, 100, RouletteWheel())
-#100 Bettors, $10000 start, $1000 limit on bets, 100 rounds
-results2 = test2.run_martingale()
 
-count_winners = 0
-start_end_diff = 0
-went_broke = 0
-for robot in results2[-1]:
 
-    if robot[1] > 10000:
-        count_winners += 1   
-    elif robot[0] == "BROKE":
-        went_broke += 1
+# test2 = Table(100, 10000, 1000, 100, RouletteWheel())
+# #100 Bettors, $10000 start, $1000 limit on bets, 100 rounds
+# results2 = test2.run_martingale()
+
+# count_winners = 0
+# start_end_diff = 0
+# went_broke = 0
+# for robot in results2[-1]:
+
+#     if robot[1] > 10000:
+#         count_winners += 1   
+#     elif robot[0] == "BROKE":
+#         went_broke += 1
     
-    start_end_diff += robot[1] - 10000
+#     start_end_diff += robot[1] - 10000
 
-print("start vs. end: " + str(start_end_diff))
-print("avg diff: " + str(start_end_diff/100))
+# print("start vs. end: " + str(start_end_diff))
+# print("avg diff: " + str(start_end_diff/100))
     
-print("winners: " + str(count_winners) + " | losers: " + str(100 - count_winners))
-print("broke: " + str(went_broke))
+# print("winners: " + str(count_winners) + " | losers: " + str(100 - count_winners))
+# print("broke: " + str(went_broke))
 
-#Writing Results to a file
-i = 0
-with open("exploring_math_data2.txt", "w") as fp:
-    for roun in results2:
-        fp.write("Round " + str(i) + ": " + str(roun) + "\n")
-        i += 1
-    fp.write("--------------------------------------------------------------------------------------------------------------\n")
-    contestant = "winner"
-    for j in range(len(results2[0])):
-        robot = []
-        for roun in results2:
-            robot.append(roun[j])
-        if(robot[-1][1] >= 10000):
-            contestant = "winner"
-        else:
-            contestant = "loser"
-        fp.write("Bettor " + str(j) + ": " + str(robot) + " | " + contestant + "\n")
+# #Writing Results to a file
+# i = 0
+# with open("exploring_math_data2.txt", "w") as fp:
+#     for roun in results2:
+#         fp.write("Round " + str(i) + ": " + str(roun) + "\n")
+#         i += 1
+#     fp.write("--------------------------------------------------------------------------------------------------------------\n")
+#     contestant = "winner"
+#     for j in range(len(results2[0])):
+#         robot = []
+#         for roun in results2:
+#             robot.append(roun[j])
+#         if(robot[-1][1] >= 10000):
+#             contestant = "winner"
+#         else:
+#             contestant = "loser"
+#         fp.write("Bettor " + str(j) + ": " + str(robot) + " | " + contestant + "\n")
+    
+#     fp.write("--------------------------------------------------------------------------------------------------------------\n")
+#     fp.write("start vs. end: " + str(start_end_diff) + "\n")
+#     fp.write("avg diff: " + str(start_end_diff/100) + "\n")
+#     fp.write("\"winners\": " + str(count_winners) + " | \"losers\": " + str(100 - count_winners) + "\n")
+#     fp.write("broke: " + str(went_broke) + "\n")
 
 
 
