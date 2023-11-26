@@ -1,5 +1,5 @@
 import random
-import matplotlib
+import matplotlib.pyplot as plt
 
 class RouletteWheel:
     def __init__(self, zeroes=2):
@@ -251,6 +251,279 @@ class Table:
                 j += 1
         
         return data
+    
+    def run_fibonacci(self, bet=0.5, lim=False, min_bet=1, broke_on=True):
+        
+        data = []
+        bet_tracker = {}
+        temp = 0
+        for gambler in self.bettors:
+            bet_tracker[gambler] = [0, 1]
+
+        for i in range(self.rounds):
+            data.append([])
+            j = 0
+            for gambler in self.bettors:
+                amt = min_bet
+                if (i == 0):
+                    amt = min_bet
+                elif(data[i-1][j][0][0] == False):
+                    temp = bet_tracker[gambler][0] + bet_tracker[gambler][1]
+                    bet_tracker[gambler][0] = bet_tracker[gambler][1]
+                    bet_tracker[gambler][1] = temp
+                    amt = bet_tracker[gambler][0] + bet_tracker[gambler][1]  
+                else:
+                    if((bet_tracker[gambler][0] == 1 and bet_tracker[gambler][1] == 1) or bet_tracker[gambler][0] == 0):
+                        bet_tracker[gambler][1] = 1
+                        bet_tracker[gambler][0] = 0
+                    else:
+                        bet_tracker[gambler][1] = bet_tracker[gambler][1] - bet_tracker[gambler][0]
+                        bet_tracker[gambler][0] = bet_tracker[gambler][0] - bet_tracker[gambler][1]
+                    amt = bet_tracker[gambler][0] + bet_tracker[gambler][1]
+                
+                out = None
+                choice = bet
+                if(broke_on and gambler.money < 1):
+                    choice = "broke" 
+            
+                match choice:
+                    case 1:
+                        if(lim and amt > self.limit[0]):
+                            amt = self.limit[0]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.single_bet(amt)
+                    case 2:
+                        if(lim and amt > self.limit[1]):
+                            amt = self.limit[1]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.two_bet(amt)
+                    case 3:
+                        if(lim and amt > self.limit[2]):
+                            amt = self.limit[2]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.three_bet(amt)
+                    case 4:
+                        if(lim and amt > self.limit[3]):
+                            amt = self.limit[3]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.four_bet(amt)
+                    case 5:
+                        if(lim and amt > self.limit[4]):
+                            amt = self.limit[4]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.five_bet(amt)
+                    case 6:
+                        if(lim and amt > self.limit[5]):
+                            amt = self.limit[5]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.six_bet(amt)
+                    case 12:
+                        if(lim and amt > self.limit[6]):
+                            amt = self.limit[6]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.twelve_bet(amt)
+                    case 0.5:
+                        if(lim and amt > self.limit[7]):
+                            amt = self.limit[7]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.half_bet(amt)
+                    case "broke":
+                        out = "BROKE"
+                    case _:
+                        out = None
+
+                
+                round_result = (out, gambler.money)
+                data[i].append(round_result)
+                j += 1
+        
+        return data
+    
+    def run_dAlembert(self, unit_ratio=0.01, bet=0.5, lim=False, min_bet=1, broke_on=True):
+        
+        data = []
+
+        unit = self.bettors[0].money * unit_ratio
+        bet_tracker = {}
+        for gambler in self.bettors:
+            bet_tracker[gambler] = unit
+        min_bet = unit
+
+        for i in range(self.rounds):
+            data.append([])
+            j = 0
+            for gambler in self.bettors:
+                amt = min_bet
+                if (i == 0):
+                    amt = min_bet
+                elif(data[i-1][j][0][0] == False):
+                    bet_tracker[gambler] = bet_tracker[gambler] + unit
+                    amt = bet_tracker[gambler]
+                else:
+                    if(bet_tracker[gambler] != min_bet):
+                        bet_tracker[gambler] = bet_tracker[gambler] - unit
+                    amt = bet_tracker[gambler]
+                
+                out = None
+                choice = bet
+                if(broke_on and gambler.money < 1):
+                    choice = "broke" 
+            
+                match choice:
+                    case 1:
+                        if(lim and amt > self.limit[0]):
+                            amt = self.limit[0]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.single_bet(amt)
+                    case 2:
+                        if(lim and amt > self.limit[1]):
+                            amt = self.limit[1]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.two_bet(amt)
+                    case 3:
+                        if(lim and amt > self.limit[2]):
+                            amt = self.limit[2]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.three_bet(amt)
+                    case 4:
+                        if(lim and amt > self.limit[3]):
+                            amt = self.limit[3]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.four_bet(amt)
+                    case 5:
+                        if(lim and amt > self.limit[4]):
+                            amt = self.limit[4]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.five_bet(amt)
+                    case 6:
+                        if(lim and amt > self.limit[5]):
+                            amt = self.limit[5]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.six_bet(amt)
+                    case 12:
+                        if(lim and amt > self.limit[6]):
+                            amt = self.limit[6]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.twelve_bet(amt)
+                    case 0.5:
+                        if(lim and amt > self.limit[7]):
+                            amt = self.limit[7]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.half_bet(amt)
+                    case "broke":
+                        out = "BROKE"
+                    case _:
+                        out = None
+
+                
+                round_result = (out, gambler.money)
+                data[i].append(round_result)
+                j += 1
+        
+        return data
+    
+    def run_parlay(self, bet=0.5, lim=False, min_bet=1, broke_on=True):
+        
+        data = []
+        bet_tracker = {}
+        for gambler in self.bettors:
+            bet_tracker[gambler] = min_bet
+
+        for i in range(self.rounds):
+            data.append([])
+            j = 0
+            for gambler in self.bettors:
+                amt = min_bet
+                if (i == 0):
+                    amt = min_bet
+                elif(data[i-1][j][0][0] == False):
+                    bet_tracker[gambler] = min_bet
+                    amt = bet_tracker[gambler]
+                else:
+                    bet_tracker[gambler] = bet_tracker[gambler] * 2
+                    amt = bet_tracker[gambler]
+                
+                out = None
+                choice = bet
+                if(broke_on and gambler.money < 1):
+                    choice = "broke" 
+            
+                match choice:
+                    case 1:
+                        if(lim and amt > self.limit[0]):
+                            amt = self.limit[0]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.single_bet(amt)
+                    case 2:
+                        if(lim and amt > self.limit[1]):
+                            amt = self.limit[1]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.two_bet(amt)
+                    case 3:
+                        if(lim and amt > self.limit[2]):
+                            amt = self.limit[2]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.three_bet(amt)
+                    case 4:
+                        if(lim and amt > self.limit[3]):
+                            amt = self.limit[3]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.four_bet(amt)
+                    case 5:
+                        if(lim and amt > self.limit[4]):
+                            amt = self.limit[4]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.five_bet(amt)
+                    case 6:
+                        if(lim and amt > self.limit[5]):
+                            amt = self.limit[5]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.six_bet(amt)
+                    case 12:
+                        if(lim and amt > self.limit[6]):
+                            amt = self.limit[6]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.twelve_bet(amt)
+                    case 0.5:
+                        if(lim and amt > self.limit[7]):
+                            amt = self.limit[7]
+                        if(broke_on and amt > gambler.money):
+                            amt = gambler.money
+                        out = gambler.half_bet(amt)
+                    case "broke":
+                        out = "BROKE"
+                    case _:
+                        out = None
+
+                
+                round_result = (out, gambler.money)
+                data[i].append(round_result)
+                j += 1
+        
+        return data
                     
                     
 
@@ -358,9 +631,168 @@ def martin_test2(num_r=100):
         fp.write("\"winners\": " + str(count_winners) + " | \"losers\": " + str(num_r - count_winners) + "\n")
         fp.write("broke: " + str(went_broke) + "\n")
 
+    money_overround = []
+    for i in range(len(results2[0])):
+            robot = []
+            for roun in results2:
+                robot.append(roun[i][1])
+            money_overround.append(robot)
+    i = 0
+    
+    for y_values in money_overround:
+        plt.plot(range(100), y_values, label = "bettor" + str(i))
+        i += 1
+    plt.xlabel('money')
+    plt.ylabel('round')
+    #plt.legend()
+    plt.show()
+
+def fib_test1(num_r=100):
+    test2 = Table(num_r, 10000, 1000, 100, RouletteWheel())
+    #100 Bettors, $10000 start, $1000 limit on bets, 100 rounds
+    results2 = test2.run_fibonacci()
+
+    count_winners = 0
+    start_end_diff = 0
+    went_broke = 0
+    for robot in results2[-1]:
+
+        if robot[1] >= 10000:
+            count_winners += 1   
+        elif robot[0] == "BROKE":
+            went_broke += 1
+        
+        start_end_diff += robot[1] - 10000
+
+    print("start vs. end: " + str(start_end_diff))
+    print("avg diff: " + str(start_end_diff/num_r))
+        
+    print("winners: " + str(count_winners) + " | losers: " + str(num_r - count_winners))
+    print("broke: " + str(went_broke))
+
+    #Writing Results to a file
+    i = 0
+    with open("exploring_math_data_fib1.txt", "w") as fp:
+        for roun in results2:
+            fp.write("Round " + str(i) + ": " + str(roun) + "\n")
+            i += 1
+        fp.write("--------------------------------------------------------------------------------------------------------------\n")
+        contestant = "winner"
+        for j in range(len(results2[0])):
+            robot = []
+            for roun in results2:
+                robot.append(roun[j])
+            if(robot[-1][1] >= 10000):
+                contestant = "winner"
+            else:
+                contestant = "loser"
+            fp.write("Bettor " + str(j) + ": " + str(robot) + " | " + contestant + "\n")
+        
+        fp.write("--------------------------------------------------------------------------------------------------------------\n")
+        fp.write("start vs. end: " + str(start_end_diff) + "\n")
+        fp.write("avg diff: " + str(start_end_diff/num_r) + "\n")
+        fp.write("\"winners\": " + str(count_winners) + " | \"losers\": " + str(num_r - count_winners) + "\n")
+        fp.write("broke: " + str(went_broke) + "\n")
+
+def dAlem_test1(num_r=100):
+    test2 = Table(num_r, 10000, 1000, 100, RouletteWheel())
+    #100 Bettors, $10000 start, $1000 limit on bets, 100 rounds
+    results2 = test2.run_dAlembert(unit_ratio=0.001)
+    #adjusted to start at 10 dollars
+
+    count_winners = 0
+    start_end_diff = 0
+    went_broke = 0
+    for robot in results2[-1]:
+
+        if robot[1] >= 10000:
+            count_winners += 1   
+        elif robot[0] == "BROKE":
+            went_broke += 1
+        
+        start_end_diff += robot[1] - 10000
+
+    print("start vs. end: " + str(start_end_diff))
+    print("avg diff: " + str(start_end_diff/num_r))
+        
+    print("winners: " + str(count_winners) + " | losers: " + str(num_r - count_winners))
+    print("broke: " + str(went_broke))
+
+    #Writing Results to a file
+    i = 0
+    with open("exploring_math_data_dAlem1.txt", "w") as fp:
+        for roun in results2:
+            fp.write("Round " + str(i) + ": " + str(roun) + "\n")
+            i += 1
+        fp.write("--------------------------------------------------------------------------------------------------------------\n")
+        contestant = "winner"
+        for j in range(len(results2[0])):
+            robot = []
+            for roun in results2:
+                robot.append(roun[j])
+            if(robot[-1][1] >= 10000):
+                contestant = "winner"
+            else:
+                contestant = "loser"
+            fp.write("Bettor " + str(j) + ": " + str(robot) + " | " + contestant + "\n")
+        
+        fp.write("--------------------------------------------------------------------------------------------------------------\n")
+        fp.write("start vs. end: " + str(start_end_diff) + "\n")
+        fp.write("avg diff: " + str(start_end_diff/num_r) + "\n")
+        fp.write("\"winners\": " + str(count_winners) + " | \"losers\": " + str(num_r - count_winners) + "\n")
+        fp.write("broke: " + str(went_broke) + "\n")
+
+def par_test1(num_r=100):
+    test2 = Table(num_r, 10000, 1000, 100, RouletteWheel())
+    #100 Bettors, $10000 start, $1000 limit on bets, 100 rounds
+    results2 = test2.run_parlay()
+
+    count_winners = 0
+    start_end_diff = 0
+    went_broke = 0
+    for robot in results2[-1]:
+
+        if robot[1] >= 10000:
+            count_winners += 1   
+        elif robot[0] == "BROKE":
+            went_broke += 1
+        
+        start_end_diff += robot[1] - 10000
+
+    print("start vs. end: " + str(start_end_diff))
+    print("avg diff: " + str(start_end_diff/num_r))
+        
+    print("winners: " + str(count_winners) + " | losers: " + str(num_r - count_winners))
+    print("broke: " + str(went_broke))
+
+    #Writing Results to a file
+    i = 0
+    with open("exploring_math_data_par1.txt", "w") as fp:
+        for roun in results2:
+            fp.write("Round " + str(i) + ": " + str(roun) + "\n")
+            i += 1
+        fp.write("--------------------------------------------------------------------------------------------------------------\n")
+        contestant = "winner"
+        for j in range(len(results2[0])):
+            robot = []
+            for roun in results2:
+                robot.append(roun[j])
+            if(robot[-1][1] >= 10000):
+                contestant = "winner"
+            else:
+                contestant = "loser"
+            fp.write("Bettor " + str(j) + ": " + str(robot) + " | " + contestant + "\n")
+        
+        fp.write("--------------------------------------------------------------------------------------------------------------\n")
+        fp.write("start vs. end: " + str(start_end_diff) + "\n")
+        fp.write("avg diff: " + str(start_end_diff/num_r) + "\n")
+        fp.write("\"winners\": " + str(count_winners) + " | \"losers\": " + str(num_r - count_winners) + "\n")
+        fp.write("broke: " + str(went_broke) + "\n")
+
+
 #MAIN: Running tests
 
-
+martin_test2()
 
 
     
