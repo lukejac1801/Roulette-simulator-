@@ -1,0 +1,40 @@
+Average End Diff
+
+Martingale (100 Rounds, 1000 start_money, no limit)
+Bettors
+10: +33.1 (1/10 lose, 0.1)
+100: -11.31 (7/100 lose, 0.07)
+1000: -30.502 (88/1000 lose, 0.088)
+10000: -32.9959 (908/10000 lose, 0.0908)
+100000: -30.85004 (9022/100000 lose, 0.09022)
+1000000: -29.212437 (87808/1000000 lose, 0.087808)
+
+Rounds (10000 Bettors, 1000 start_money, no limit)
+10: -2.1017 (1547/10000 lose, 0.1547)
+100: -30.0278 (880/10000 lose, 0.088)
+1000: -252.3033 (5446/10000 lose, 0.5446)
+10000: -771.5826 (9516/10000 lose, 0.9516)
+
+Start Money (10000 Bettors, 1000 Rounds, no limit)
+10: -8.0166 (9951/10000 lose [9951 broke], 0.9951)
+100: -61.9787 (9227/10000 lose [9212 broke], 0.9227)
+1000: -242.2831 (5381/10000 lose [4233 broke], 0.5381)
+10000: -437.4456 (1081/10000 lose [589 broke], 0.1081)
+100000: -608.4591 (204/10000 lose [79 broke], 0.0204)
+
+Bet Limit (10000 Bettors, 1000 Rounds, 1000 start_money)
+10: -149.4249 (8719/10000 lose [0 broke], 0.8719)
+100: -253.8719 (6730/10000 lose [1435 broke], 0.6730)
+1000: -241.4283 (5366/10000 lose [4238 broke], 0.5366)
+10000: -246.7458 (5392/10000 lose [4279 broke], 0.5392)
+
+"Ideal Combo" (1000 Bettors, 10000 Rounds, 10000 start_money, no limit)
+#High Starting Money, High Number of Rounds, and No Betting Limit
+Results: -3636.109 (578/1000 lose [503 broke], 0.578)
+
+Realistic Situation (1000 Bettors, 1000 Rounds, 10000 start_money, 10 bet min, 50000 bet max)
+If we consider ourselves high rollers (10000$) with a whole day to ourselves (1000 rounds),
+most casinos from research have around a $10 min bet, and it appears well established casinos will have a
+bet limit that makes it so they don't pay out more than $100,000 at once. We did find outside bet limits
+to be smaller in some cases, however we often don't exceed that limit with $5000 outside bets.
+Results: -2446.79 (547/1000 lose [421 broke], 0.547)
